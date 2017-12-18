@@ -5,14 +5,69 @@ describe Bitmap do
   describe 'initialize' do
     let(:rows) { 3 }
     let(:cols) { 4 }
-    let(:bitmap) { Bitmap.new(rows, cols) }
 
     it "creates an m x n empty bitmap" do
+      bitmap = Bitmap.new(rows, cols)
       expect(bitmap.bitmap).to eql([
         ["O", "O", "O", "O"],
         ["O", "O", "O", "O"],
         ["O", "O", "O", "O"]
       ])
+    end
+
+    it "creates an m x n bitmap of a given color" do
+      bitmap = Bitmap.new(rows, cols, 'R')
+      expect(bitmap.bitmap).to eql([
+        ["R", "R", "R", "R"],
+        ["R", "R", "R", "R"],
+        ["R", "R", "R", "R"]
+      ])
+    end
+  end
+
+  describe '#clear' do
+    let(:bitmap) { Bitmap.new(3, 3, "R") }
+
+    it "sets all pixels back to white (O)" do
+      expect(bitmap.clear).to eql([
+        ["O", "O", "O"],
+        ["O", "O", "O"],
+        ["O", "O", "O"]
+      ])
+    end
+  end
+
+  describe '#set_pixel_to' do
+    let (:bitmap) { Bitmap.new(3, 3) }
+    let (:original_image) do
+      [
+        ["O", "O", "O"],
+        ["O", "O", "O"],
+        ["O", "O", "O"]
+      ]
+    end
+
+    it "changes the color of a given pixel to the given color" do
+      bitmap.set_pixel_to({x: 1, y: 0}, 'R')
+      expect(bitmap.bitmap).to eql([
+        ["O", "R", "O"],
+        ["O", "O", "O"],
+        ["O", "O", "O"]
+      ])
+    end
+
+    context ":x coordinates is out of range" do
+      it 'does nothing' do
+        bitmap.set_pixel_to({x: 3, y: 0}, 'R')
+        expect(bitmap.bitmap).to eql(original_image)
+      end
+    end
+
+    context ":y coordinates is out of range" do
+      it 'does nothing' do
+        bitmap.set_pixel_to({x: 0, y: 3}, 'R')
+        expect(bitmap.bitmap).to eql(original_image)
+      end
     end
   end
 
