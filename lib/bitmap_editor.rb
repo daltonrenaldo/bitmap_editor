@@ -1,6 +1,5 @@
 require './lib/bitmap'
 class BitmapEditor
-  attr_writer :bitmap
 
   def run(file)
     return puts "please provide correct file" if file.nil? || !File.exists?(file)
@@ -15,9 +14,9 @@ class BitmapEditor
       when /L\s(\d+)\s(\d+)\s(.)/
         puts ""
       when 'S'
-          show_bitmap
+        show_bitmap
       else
-          puts 'unrecognised command :('
+        puts 'unrecognised command :('
       end
     end
   end
