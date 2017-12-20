@@ -20,7 +20,7 @@ class BitmapEditor
       when /V\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
         commandor.color_column($1, $2, $3, $4)
       when /H\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
-        commandor.color_row($1, $2, $3, $4)
+        commandor.color_row($3, $1, $2, $4)
       when 'S'
         commandor.render_bitmap
       else

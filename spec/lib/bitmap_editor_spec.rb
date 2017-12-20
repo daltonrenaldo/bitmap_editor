@@ -72,10 +72,10 @@ describe BitmapEditor do
       end
 
       context 'reads in color row segment command' do
-        let(:file_content) { StringIO.new('H 3 1 3 A') }
+        let(:file_content) { StringIO.new('H 1 3 2 A') }
 
-        it "executes color_column" do
-          expect(commandor).to receive(:color_row).with('3', '1', '3', 'A')
+        it "executes color_row" do
+          expect(commandor).to receive(:color_row).with('2', '1', '3', 'A')
         end
       end
 
