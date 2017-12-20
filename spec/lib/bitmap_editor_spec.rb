@@ -23,25 +23,70 @@ describe BitmapEditor do
       before do
         allow(File).to receive(:exists?).and_return(true)
         allow(File).to receive(:open).with(filename).and_return(file_content)
+        allow(subject).to receive(:commandor).and_return(commandor)
       end
 
-      context 'reads create bitmap command' do
+      after do
+        subject.run(filename)
+      end
+
+      context 'reads in create bitmap command' do
         let(:file_content) { StringIO.new("I 5 5") }
         let(:bitmap_instance) { Bitmap.new(5, 5) }
 
         it "creates the bitmap" do
           expect(Bitmap).to receive(:new).with(5, 5)
-          subject.run(filename)
         end
       end
 
-      context 'reads show bitmap command' do
+      context 'reads in show bitmap command' do
         let(:file_content) { StringIO.new("S") }
 
-        it "outputs the bitmap" do
-          allow(subject).to receive(:commandor).and_return(commandor)
+        it "executes render_bitmap command" do
           expect(commandor).to receive(:render_bitmap)
-          subject.run filename
+        end
+      end
+
+      context 'reads in clear bitmap command' do
+        let(:file_content) { StringIO.new("C") }
+
+        it 'executes clear_bitmap command' do
+          expect(commandor).to receive(:clear_bitmap)
+        end
+      end
+
+      context 'reads in color pixel command' do
+        let(:file_content) { StringIO.new("L 4 2 A") }
+
+        it 'executes color_pixel command' do
+          expect(commandor).to receive(:color_pixel).with('4', '2', 'A')
+        end
+      end
+
+      context 'reads in color column segment command' do
+        let(:file_content) { StringIO.new('V 3 1 3 A') }
+
+        it "executes color_column" do
+          expect(commandor).to receive(:color_column).with('3', '1', '3', 'A')
+        end
+      end
+
+      context 'reads in color row segment command' do
+        let(:file_content) { StringIO.new('H 3 1 3 A') }
+
+        it "executes color_column" do
+          expect(commandor).to receive(:color_row).with('3', '1', '3', 'A')
+        end
+      end
+
+      # REVIEW maybe should simple abort/exit on invalid command
+      context 'reads in invalid command' do
+        ['V 3 1 3 a', 'F', 'C 3 1 3 A', 'V313A', 's'].each do |invalid_command|
+          let(:file_content) { StringIO.new(invalid_command) }
+
+          it "outputs 'unrecognised command :('" do
+            expect(STDOUT).to receive(:puts).with("unrecognised command :(")
+          end
         end
       end
     end

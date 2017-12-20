@@ -15,8 +15,12 @@ class BitmapEditor
         create_bitmap($1, $2)
       when 'C'
         commandor.clear_bitmap
-      when /L\s(\d+)\s(\d+)\s(.)/
+      when /L\s(\d+)\s(\d+)\s([A-Z])$/
         commandor.color_pixel($1, $2, $3)
+      when /V\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
+        commandor.color_column($1, $2, $3, $4)
+      when /H\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
+        commandor.color_row($1, $2, $3, $4)
       when 'S'
         commandor.render_bitmap
       else
