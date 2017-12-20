@@ -1,5 +1,8 @@
+require 'forwardable'
 class Bitmap
   attr_reader :bitmap, :rows, :cols
+  extend Forwardable
+  def_delegators :@bitmap, :empty?
 
   # creates the bitmap image
   # @param rows [Integer] number of rows
