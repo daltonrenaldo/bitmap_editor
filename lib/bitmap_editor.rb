@@ -1,4 +1,6 @@
 require './lib/bitmap'
+require './lib/bitmap_editor/command'
+
 class BitmapEditor
   def initialize(bitmap_class = Bitmap, command_class = BitmapEditor::Command)
     @bitmap_class = bitmap_class
@@ -12,7 +14,7 @@ class BitmapEditor
       line = line.chomp
       case line
       when /I\s(\d+)\s(\d+)/
-        create_bitmap($1, $2)
+        create_bitmap($2, $1)
       when 'C'
         commandor.clear_bitmap
       when /L\s(\d+)\s(\d+)\s([A-Z])$/

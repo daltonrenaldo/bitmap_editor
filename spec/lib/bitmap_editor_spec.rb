@@ -31,11 +31,10 @@ describe BitmapEditor do
       end
 
       context 'reads in create bitmap command' do
-        let(:file_content) { StringIO.new("I 5 5") }
-        let(:bitmap_instance) { Bitmap.new(5, 5) }
+        let(:file_content) { StringIO.new("I 5 6") }
 
         it "creates the bitmap" do
-          expect(Bitmap).to receive(:new).with(5, 5)
+          expect(Bitmap).to receive(:new).with(6, 5)
         end
       end
 
