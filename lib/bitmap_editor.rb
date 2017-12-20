@@ -1,5 +1,9 @@
 require './lib/bitmap'
 class BitmapEditor
+  def initialize(bitmap_class = Bitmap, command_class = BitmapEditor::Command)
+    @bitmap_class = bitmap_class
+    @command_class = command_class
+  end
 
   def run(file)
     return puts "please provide correct file" if file.nil? || !File.exists?(file)
@@ -10,11 +14,11 @@ class BitmapEditor
       when /I\s(\d+)\s(\d+)/
         create_bitmap($1, $2)
       when 'C'
-        clear_bitmap
+        commandor.clear_bitmap
       when /L\s(\d+)\s(\d+)\s(.)/
-        puts ""
+        commandor.color_pixel($1, $2, $3)
       when 'S'
-        show_bitmap
+        commandor.render_bitmap
       else
         puts 'unrecognised command :('
       end
@@ -24,19 +28,10 @@ class BitmapEditor
   private
 
   def create_bitmap(rows, cols)
-    @bitmap ||= Bitmap.new(rows.to_i, cols.to_i)
+    @bitmap ||= @bitmap_class.new(rows.to_i, cols.to_i)
   end
 
-  def clear_bitmap
-    return if @bitmap.empty?
-    @bitmap.clear
-  end
-
-  def show_bitmap
-    if @bitmap.empty?
-      puts "There is no image"
-    else
-      puts @bitmap
-    end
+  def commandor
+    @commandor ||= @command_class.new(@bitmap)
   end
 end

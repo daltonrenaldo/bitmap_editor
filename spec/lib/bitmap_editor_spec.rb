@@ -18,18 +18,31 @@ describe BitmapEditor do
 
     context 'input file is valid' do
       let(:filename) { 'valid-file.txt' }
-      let(:file_content) { StringIO.new("I 5 5\nS") }
-      let(:bitmap_instance) { Bitmap.new(5, 5) }
+      let(:commandor) { double('BitmapEditor::Command') }
 
       before do
         allow(File).to receive(:exists?).and_return(true)
         allow(File).to receive(:open).with(filename).and_return(file_content)
       end
 
-      it "runs eachs commands sequentially" do
-        expect(Bitmap).to receive(:new).with(5, 5).and_return(bitmap_instance)
-        expect(STDOUT).to receive(:puts).with(bitmap_instance)
-        subject.run(filename)
+      context 'reads create bitmap command' do
+        let(:file_content) { StringIO.new("I 5 5") }
+        let(:bitmap_instance) { Bitmap.new(5, 5) }
+
+        it "creates the bitmap" do
+          expect(Bitmap).to receive(:new).with(5, 5)
+          subject.run(filename)
+        end
+      end
+
+      context 'reads show bitmap command' do
+        let(:file_content) { StringIO.new("S") }
+
+        it "outputs the bitmap" do
+          allow(subject).to receive(:commandor).and_return(commandor)
+          expect(commandor).to receive(:render_bitmap)
+          subject.run filename
+        end
       end
     end
   end
