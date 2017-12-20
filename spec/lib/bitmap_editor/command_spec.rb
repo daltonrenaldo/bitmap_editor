@@ -3,7 +3,7 @@ require './lib/bitmap_editor/command'
 
 describe BitmapEditor::Command do
   let(:command) { described_class.new(bitmap) }
-  let(:bitmap) { bitmap = double('bitmap') }
+  let(:bitmap) { double('bitmap') }
 
   describe '#render_bitmap' do
     it "renders the bitmap" do
@@ -36,8 +36,20 @@ describe BitmapEditor::Command do
   end
 
   describe '#color_column' do
+    it "colors column 2 from row 1 to row 3" do
+      expect(command).to receive(:color_pixel).with('2', '1', 'B')
+      expect(command).to receive(:color_pixel).with('2', '2', 'B')
+      expect(command).to receive(:color_pixel).with('2', '3', 'B')
+      command.color_column('2', '1', '3', 'B')
+    end
   end
 
   describe '#color_row' do
+    it "colors row 2 from column 1 to column 3" do
+      expect(command).to receive(:color_pixel).with('1', '2', 'B')
+      expect(command).to receive(:color_pixel).with('2', '2', 'B')
+      expect(command).to receive(:color_pixel).with('3', '2', 'B')
+      command.color_row('2', '1', '3', 'B')
+    end
   end
 end
