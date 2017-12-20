@@ -10,7 +10,9 @@ class BitmapEditor
     end
 
     def color_pixel(x, y, color)
-      @bitmap.set_pixel_to({x: x.to_i, y: y.to_i}, color)
+      x_index = x.to_i - 1
+      y_index = y.to_i - 1
+      @bitmap.set_pixel_to({x: x_index, y: y_index}, color)
     end
 
     def color_column(col, row_start, row_end, color)

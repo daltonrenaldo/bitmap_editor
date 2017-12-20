@@ -30,7 +30,7 @@ describe BitmapEditor::Command do
 
   describe '#color_pixel' do
     it "colors the given pixel coordinate of the bitmap" do
-      expect(bitmap).to receive(:set_pixel_to).with({x: 2, y: 4}, 'B')
+      expect(bitmap).to receive(:set_pixel_to).with({x: 1, y: 3}, 'B')
       command.color_pixel('2', '4', 'B')
     end
   end
