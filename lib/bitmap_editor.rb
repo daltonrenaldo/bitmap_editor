@@ -2,6 +2,11 @@ require './lib/bitmap'
 require './lib/bitmap_editor/command'
 
 class BitmapEditor
+  MAX_BITMAP_SIZE = 250
+  MIN_BITMAP_SIZE = 1
+
+  attr_reader :bitmap
+
   def initialize(bitmap_class = Bitmap, command_class = BitmapEditor::Command)
     @bitmap_class = bitmap_class
     @command_class = command_class
@@ -14,7 +19,7 @@ class BitmapEditor
       line = line.chomp
       case line
       when /I\s(\d+)\s(\d+)/
-        create_bitmap($2, $1)
+        create_bitmap($2.to_i, $1.to_i)
       when 'C'
         commandor.clear_bitmap
       when /L\s(\d+)\s(\d+)\s([A-Z])$/
@@ -34,7 +39,12 @@ class BitmapEditor
   private
 
   def create_bitmap(rows, cols)
-    @bitmap ||= @bitmap_class.new(rows.to_i, cols.to_i)
+    if (rows > MAX_BITMAP_SIZE || rows < MIN_BITMAP_SIZE ||
+        cols > MAX_BITMAP_SIZE || cols < MIN_BITMAP_SIZE)
+      return puts "Cannot Create Bitmap: Sizes must be between 1 - 250"
+    end
+
+    @bitmap ||= @bitmap_class.new(rows, cols)
   end
 
   def commandor

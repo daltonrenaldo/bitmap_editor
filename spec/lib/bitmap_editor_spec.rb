@@ -36,10 +36,31 @@ describe BitmapEditor do
         it "creates the bitmap" do
           expect(Bitmap).to receive(:new).with(6, 5)
         end
+
+        context 'intended sizes too large' do
+          let(:file_content) { StringIO.new("I 251 1") }
+
+          it 'indicates size is too large' do
+            expect(STDOUT).to receive(:puts).with('Cannot Create Bitmap: Sizes must be between 1 - 250')
+          end
+        end
+
+        context 'intended sizes too small' do
+          let(:file_content) { StringIO.new("I 0 250") }
+
+          it 'indicates size is too small' do
+            expect(STDOUT).to receive(:puts).with('Cannot Create Bitmap: Sizes must be between 1 - 250')
+          end
+        end
       end
 
       context 'reads in show bitmap command' do
         let(:file_content) { StringIO.new("S") }
+        let(:bitmap) { double('Bitmap') }
+
+        before do
+          allow(subject).to receive(:bitmap).and_return(bitmap)
+        end
 
         it "executes render_bitmap command" do
           expect(commandor).to receive(:render_bitmap)
