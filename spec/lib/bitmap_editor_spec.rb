@@ -58,10 +58,6 @@ describe BitmapEditor do
         let(:file_content) { StringIO.new("S") }
         let(:bitmap) { double('Bitmap') }
 
-        before do
-          allow(subject).to receive(:bitmap).and_return(bitmap)
-        end
-
         it "executes render_bitmap command" do
           expect(commandor).to receive(:perform).with(:render_bitmap)
         end

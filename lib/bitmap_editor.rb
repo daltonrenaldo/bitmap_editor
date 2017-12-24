@@ -5,8 +5,6 @@ class BitmapEditor
   MAX_BITMAP_SIZE = 250
   MIN_BITMAP_SIZE = 1
 
-  attr_reader :bitmap
-
   def initialize(bitmap_class = Bitmap, command_class = BitmapEditor::Command)
     @bitmap_class = bitmap_class
     @command_class = command_class
