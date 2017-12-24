@@ -5,19 +5,26 @@ describe BitmapEditor::Command do
   let(:command) { described_class.new(bitmap) }
   let(:bitmap) { double('bitmap') }
 
+  describe '#perform' do
+    it "runs the given method with the given params" do
+      expect(command).to receive(:color_pixel).with(1, 1, 'F')
+      command.perform(:color_pixel, 1, 1, 'F')
+    end
+
+    context 'bitmap does not exists' do
+      let(:bitmap) { nil }
+
+      it 'does nothing' do
+        expect(command).to_not receive(:clear_bitmap)
+        command.perform(:clear_bitmap)
+      end
+    end
+  end
+
   describe '#render_bitmap' do
     it "renders the bitmap" do
       expect(STDOUT).to receive(:puts).with(bitmap)
       command.render_bitmap
-    end
-
-    context 'when bitmap is not present' do
-      let(:bitmap) { nil }
-
-      it "says 'There is no image'" do
-        expect(STDOUT).to receive(:puts).with("There is no image")
-        command.render_bitmap
-      end
     end
   end
 

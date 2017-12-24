@@ -4,10 +4,13 @@ class BitmapEditor
       @bitmap = bitmap
     end
 
+    def perform(command, *args)
+      send(command, *args) if respond_to?(command) && @bitmap
+    end
+
     # Clears the bitmap
     #
     def clear_bitmap
-      return if @bitmap.nil?
       @bitmap.clear
     end
 
@@ -49,11 +52,7 @@ class BitmapEditor
     # Draws the bitmap
     #
     def render_bitmap
-      if @bitmap.nil?
-        puts "There is no image"
-      else
-        puts @bitmap
-      end
+      puts @bitmap
     end
   end
 end
