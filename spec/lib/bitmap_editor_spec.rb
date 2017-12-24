@@ -63,7 +63,7 @@ describe BitmapEditor do
         end
 
         it "executes render_bitmap command" do
-          expect(commandor).to receive(:render_bitmap)
+          expect(commandor).to receive(:perform).with(:render_bitmap)
         end
       end
 
@@ -71,7 +71,7 @@ describe BitmapEditor do
         let(:file_content) { StringIO.new("C") }
 
         it 'executes clear_bitmap command' do
-          expect(commandor).to receive(:clear_bitmap)
+          expect(commandor).to receive(:perform).with(:clear_bitmap)
         end
       end
 
@@ -79,7 +79,7 @@ describe BitmapEditor do
         let(:file_content) { StringIO.new("L 4 2 A") }
 
         it 'executes color_pixel command' do
-          expect(commandor).to receive(:color_pixel).with('4', '2', 'A')
+          expect(commandor).to receive(:perform).with(:color_pixel, '4', '2', 'A')
         end
       end
 
@@ -87,7 +87,7 @@ describe BitmapEditor do
         let(:file_content) { StringIO.new('V 3 1 3 A') }
 
         it "executes color_column" do
-          expect(commandor).to receive(:color_column).with('3', '1', '3', 'A')
+          expect(commandor).to receive(:perform).with(:color_column, '3', '1', '3', 'A')
         end
       end
 
@@ -95,11 +95,10 @@ describe BitmapEditor do
         let(:file_content) { StringIO.new('H 1 3 2 A') }
 
         it "executes color_row" do
-          expect(commandor).to receive(:color_row).with('2', '1', '3', 'A')
+          expect(commandor).to receive(:perform).with(:color_row, '2', '1', '3', 'A')
         end
       end
 
-      # REVIEW maybe should simple abort/exit on invalid command
       context 'reads in invalid command' do
         ['V 3 1 3 a', 'F', 'C 3 1 3 A', 'V313A', 's'].each do |invalid_command|
           let(:file_content) { StringIO.new(invalid_command) }

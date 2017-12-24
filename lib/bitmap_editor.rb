@@ -21,15 +21,15 @@ class BitmapEditor
       when /I\s(\d+)\s(\d+)/
         create_bitmap($2.to_i, $1.to_i)
       when 'C'
-        commandor.clear_bitmap
+        commandor.perform(:clear_bitmap)
       when /L\s(\d+)\s(\d+)\s([A-Z])$/
-        commandor.color_pixel($1, $2, $3)
+        commandor.perform(:color_pixel, $1, $2, $3)
       when /V\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
-        commandor.color_column($1, $2, $3, $4)
+        commandor.perform(:color_column, $1, $2, $3, $4)
       when /H\s(\d+)\s(\d+)\s(\d+)\s([A-Z])$/
-        commandor.color_row($3, $1, $2, $4)
+        commandor.perform(:color_row, $3, $1, $2, $4)
       when 'S'
-        commandor.render_bitmap
+        commandor.perform(:render_bitmap)
       else
         puts 'unrecognised command :('
       end
