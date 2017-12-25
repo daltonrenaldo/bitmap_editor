@@ -21,6 +21,13 @@ describe BitmapEditor::Command do
         expect(subject).to_not receive(:clear_bitmap)
         subject.perform(:clear_bitmap)
       end
+
+      context 'when command is to create bitmap' do
+        it 'creates bitmap' do
+          expect(subject).to receive(:create_bitmap).with(1, 2)
+          subject.perform(:create_bitmap, 1, 2)
+        end
+      end
     end
   end
 

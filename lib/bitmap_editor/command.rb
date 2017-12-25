@@ -7,7 +7,7 @@ class BitmapEditor
     end
 
     def perform(command, *args)
-      send(command, *args) if bitmap
+      send(command, *args) if bitmap || command.to_s == "i" || command.to_s == "create_bitmap"
     end
 
     # Creates bitmap
