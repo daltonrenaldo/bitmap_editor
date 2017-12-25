@@ -8,12 +8,14 @@ class BitmapEditor
 
     def perform(command, *args)
       send(command, *args) if bitmap || command.to_s == "i" || command.to_s == "create_bitmap"
+    rescue ArgumentError => e
+      puts "#{e.message}; skipping command #{command}"
     end
 
     # Creates bitmap
     # @param cols
     # @param rows
-    # @return [Bitmap] the newly created bitmap or existing
+    # @return [Bitmap] the newly created bitmap
     #
     def create_bitmap(cols, rows)
       if (rows > MAX_BITMAP_SIZE || rows < MIN_BITMAP_SIZE ||
@@ -21,7 +23,7 @@ class BitmapEditor
         return puts "Cannot Create Bitmap: Sizes must be between 1 - 250"
       end
 
-      @bitmap ||= @bitmap_class.new(rows, cols)
+      @bitmap = @bitmap_class.new(rows, cols)
     end
     alias :i :create_bitmap
 

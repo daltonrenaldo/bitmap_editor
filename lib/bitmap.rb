@@ -21,7 +21,7 @@ class Bitmap
   end
 
   # sets the given pixel to the given color
-  # @param pixel [Hash :x, :y] x and y coordinates for the pixel
+  # @param pixel [Hash :x, :y] x and y COORDINATES for the pixel
   # @param color [String] the color to set the pixel to
   def set_pixel_to(pixel, color)
     return unless pixel_exists?(pixel)
@@ -45,6 +45,9 @@ class Bitmap
   end
 
   def pixel_exists?(pixel)
-    pixel[:x] < cols && pixel[:y] < rows
+    pixel[:x] < cols &&
+    pixel[:x] >= 0 &&
+    pixel[:y] >= 0 &&
+    pixel[:y] < rows
   end
 end

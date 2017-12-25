@@ -57,8 +57,13 @@ describe Bitmap do
     end
 
     context ":x coordinates is out of range" do
-      it 'does nothing' do
+      it 'ignores out of upperbound' do
         bitmap.set_pixel_to({x: 3, y: 0}, 'R')
+        expect(bitmap.bitmap).to eql(original_image)
+      end
+
+      it 'ignores values less than 0' do
+        bitmap.set_pixel_to({x: -1, y: 0}, 'R')
         expect(bitmap.bitmap).to eql(original_image)
       end
     end
@@ -66,6 +71,11 @@ describe Bitmap do
     context ":y coordinates is out of range" do
       it 'does nothing' do
         bitmap.set_pixel_to({x: 0, y: 3}, 'R')
+        expect(bitmap.bitmap).to eql(original_image)
+      end
+
+      it 'ignores values less than 0' do
+        bitmap.set_pixel_to({x: 0, y: -1}, 'R')
         expect(bitmap.bitmap).to eql(original_image)
       end
     end
