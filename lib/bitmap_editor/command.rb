@@ -2,6 +2,9 @@ require './lib/bitmap'
 
 class BitmapEditor
   class Command
+    MAX_BITMAP_SIZE = 250
+    MIN_BITMAP_SIZE = 1
+
     def initialize(bitmap_class = Bitmap)
       @bitmap_class = bitmap_class
     end

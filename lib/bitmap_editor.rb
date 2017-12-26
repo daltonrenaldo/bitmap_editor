@@ -1,9 +1,6 @@
 require './lib/bitmap_editor/command_runner'
 
 class BitmapEditor
-  MAX_BITMAP_SIZE = 250
-  MIN_BITMAP_SIZE = 1
-
   def initialize(command_runner_class = BitmapEditor::CommandRunner)
     @command_runner_class = command_runner_class
   end
