@@ -114,19 +114,17 @@ describe Bitmap do
 
   describe '#color_column' do
     it "colors column 2 from row 1 to row 3" do
-      expect(subject).to receive(:color_pixel).with('2', '1', 'B')
-      expect(subject).to receive(:color_pixel).with('2', '2', 'B')
-      expect(subject).to receive(:color_pixel).with('2', '3', 'B')
+      subject.create_bitmap(3, 3)
       subject.color_column('2', '1', '3', 'B')
+      expect(subject.bitmap).to eql([["O", "B", "O"], ["O", "B", "O"], ["O", "B", "O"]])
     end
   end
 
   describe '#color_row' do
     it "colors row 2 from column 1 to column 3" do
-      expect(subject).to receive(:color_pixel).with('1', '2', 'B')
-      expect(subject).to receive(:color_pixel).with('2', '2', 'B')
-      expect(subject).to receive(:color_pixel).with('3', '2', 'B')
+      subject.create_bitmap(3, 3)
       subject.color_row('1', '3', '2', 'B')
+      expect(subject.bitmap).to eql([["O", "O", "O"], ["B", "B", "B"], ["O", "O", "O"]])
     end
   end
 end
