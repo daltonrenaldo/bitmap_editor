@@ -2,26 +2,21 @@ require './lib/bitmap'
 
 class BitmapEditor
   class CommandRunner
-    def initialize(bitmap_class = Bitmap)
-      @bitmap_class = bitmap_class
-    end
+    COMMANDS_MAPPING = {
+      'C' => :clear,
+      'S' => :render_bitmap,
+      'I' => :create_bitmap,
+      'L' => :color_pixel,
+      'V' => :color_column,
+      'H' => :color_row
+    }
 
-    def execute(line)
+    def execute(line, bitmap)
       return unless line =~ /([A-Z])\s?(.*)/
-      method = $1.downcase
-      args   = $2.split(' ').map{|arg| arg.match(/\d+/) ? arg.to_i : arg }
-
-      if bitmap.respond_to?(method)
-        bitmap.send(method, *args)
-      else
-        puts "unrecognised command :("
-      end
-    end
-
-    private
-
-    def bitmap
-      @bitmap ||= @bitmap_class.new
+      method = COMMANDS_MAPPING[$1]
+      return puts 'unrecognised command :(' unless method && bitmap.respond_to?(method)
+      args = $2.split(' ').map{|arg| arg.match(/\d+/) ? arg.to_i : arg }
+      bitmap.send(method, *args)
     end
   end
 end

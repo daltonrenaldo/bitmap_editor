@@ -1,15 +1,19 @@
+require './lib/bitmap'
 require './lib/bitmap_editor/command_runner'
 
 class BitmapEditor
-  def initialize(command_runner_class = BitmapEditor::CommandRunner)
-    @command_runner_class = command_runner_class
+  attr_reader :bitmap, :command_runner
+
+  def initialize(bitmap = Bitmap.new, command_runner = BitmapEditor::CommandRunner.new)
+    @bitmap = bitmap
+    @command_runner = command_runner
   end
 
   def run(file)
     return puts "please provide correct file" if file.nil? || !File.exists?(file)
 
     File.open(file).each do |line|
-      command_runner.execute(line.chomp)
+      command_runner.execute(line.chomp, bitmap)
     end
   end
 

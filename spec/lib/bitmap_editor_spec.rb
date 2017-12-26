@@ -19,16 +19,18 @@ describe BitmapEditor do
     context 'input file is valid' do
       let(:filename) { 'valid-file.txt' }
       let(:command_runner) { double('BitmapEditor::CommandRunner') }
+      let(:bitmap) { double('Bitmap') }
       let(:file_content) { StringIO.new('I 5 5') }
 
       before do
         allow(File).to receive(:exists?).and_return(true)
         allow(File).to receive(:open).with(filename).and_return(file_content)
         allow(subject).to receive(:command_runner).and_return(command_runner)
+        allow(subject).to receive(:bitmap).and_return(bitmap)
       end
 
       it "execute the line" do
-        expect(command_runner).to receive(:execute).with("I 5 5")
+        expect(command_runner).to receive(:execute).with("I 5 5", bitmap)
         subject.run(filename)
       end
     end
