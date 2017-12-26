@@ -1,9 +1,9 @@
-require './lib/bitmap_editor/command'
+require './lib/bitmap'
 
 class BitmapEditor
   class CommandRunner
-    def initialize(command_class = BitmapEditor::Command)
-      @command_class = command_class
+    def initialize(bitmap_class = Bitmap)
+      @bitmap_class = bitmap_class
     end
 
     def execute(line)
@@ -11,17 +11,17 @@ class BitmapEditor
       method = $1.downcase
       args   = $2.split(' ').map{|arg| arg.match(/\d+/) ? arg.to_i : arg }
 
-      if commandor.respond_to?(method)
-        commandor.perform(method, *args)
+      if bitmap.respond_to?(method)
+        bitmap.send(method, *args)
       else
-        puts 'unrecognised command :('
+        puts "unrecognised command :("
       end
     end
 
     private
 
-    def commandor
-      @commandor ||= @command_class.new
+    def bitmap
+      @bitmap ||= @bitmap_class.new
     end
   end
 end

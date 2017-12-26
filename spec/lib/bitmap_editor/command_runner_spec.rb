@@ -2,27 +2,27 @@ require 'spec_helper'
 require './lib/bitmap_editor/command_runner';
 
 describe BitmapEditor::CommandRunner do
-  let(:commandor) { double('BitmapEditor::Command') }
+  let(:bitmap) { double('Bitmap') }
 
   describe '#execute' do
     before do
-      allow(subject).to receive(:commandor).and_return(commandor)
+      allow(subject).to receive(:bitmap).and_return(bitmap)
     end
 
-    context 'commandor responds to line command' do
+    context 'bitmap responds to line command' do
       before do
-        allow(commandor).to receive(:respond_to?).with("i").and_return(true)
+        allow(bitmap).to receive(:respond_to?).with("i").and_return(true)
       end
 
       it 'perfoms the command' do
-        expect(commandor).to receive(:perform).with("i", 3, 4)
+        expect(bitmap).to receive(:i).with(3, 4)
         subject.execute("I 3 4")
       end
     end
 
-    context 'commandor does not respond to line command' do
+    context 'bitmap does not respond to line command' do
       before do
-        allow(commandor).to receive(:respond_to?).with('j').and_return(false)
+        allow(bitmap).to receive(:respond_to?).with('j').and_return(false)
       end
 
       it 'outputs unrecognised command' do

@@ -2,13 +2,11 @@ require 'spec_helper'
 require './lib/bitmap'
 
 describe Bitmap do
-  describe 'initialize' do
-    let(:rows) { 3 }
-    let(:cols) { 4 }
-
-    it "creates an m x n empty bitmap" do
-      bitmap = Bitmap.new(rows, cols)
-      expect(bitmap.bitmap).to eql([
+  describe '#create_bitmap' do
+    let(:error_message) { 'Cannot Create Bitmap: Sizes must be between 1 - 250' }
+    it "creates blank bitmap" do
+      subject.create_bitmap(4, 3)
+      expect(subject.bitmap).to eql([
         ["O", "O", "O", "O"],
         ["O", "O", "O", "O"],
         ["O", "O", "O", "O"]
@@ -16,20 +14,36 @@ describe Bitmap do
     end
 
     it "creates an m x n bitmap of a given color" do
-      bitmap = Bitmap.new(rows, cols, 'R')
-      expect(bitmap.bitmap).to eql([
+      subject.create_bitmap(4, 3, "R")
+      expect(subject.bitmap).to eql([
         ["R", "R", "R", "R"],
         ["R", "R", "R", "R"],
         ["R", "R", "R", "R"]
       ])
     end
+
+    context 'intended sizes too large' do
+      it 'indicates size is too large' do
+        expect(STDOUT).to receive(:puts).with(error_message)
+        subject.create_bitmap(1, 251)
+      end
+    end
+
+    context 'intended sizes too small' do
+      it 'indicates size is too small' do
+        expect(STDOUT).to receive(:puts).with(error_message)
+        subject.create_bitmap(250, 0)
+      end
+    end
   end
 
   describe '#clear' do
-    let(:bitmap) { Bitmap.new(3, 3, "R") }
+    before do
+      subject.create_bitmap(3, 3, 'R')
+    end
 
     it "sets all pixels back to white (O)" do
-      expect(bitmap.clear).to eql([
+      expect(subject.clear).to eql([
         ["O", "O", "O"],
         ["O", "O", "O"],
         ["O", "O", "O"]
@@ -38,7 +52,6 @@ describe Bitmap do
   end
 
   describe '#set_pixel_to' do
-    let (:bitmap) { Bitmap.new(3, 3) }
     let (:original_image) do
       [
         ["O", "O", "O"],
@@ -47,9 +60,13 @@ describe Bitmap do
       ]
     end
 
+    before do
+      subject.create_bitmap(3, 3)
+    end
+
     it "changes the color of a given pixel to the given color" do
-      bitmap.set_pixel_to({x: 1, y: 0}, 'R')
-      expect(bitmap.bitmap).to eql([
+      subject.set_pixel_to({x: 1, y: 0}, 'R')
+      expect(subject.bitmap).to eql([
         ["O", "R", "O"],
         ["O", "O", "O"],
         ["O", "O", "O"]
@@ -58,33 +75,65 @@ describe Bitmap do
 
     context ":x coordinates is out of range" do
       it 'ignores out of upperbound' do
-        bitmap.set_pixel_to({x: 3, y: 0}, 'R')
-        expect(bitmap.bitmap).to eql(original_image)
+        subject.set_pixel_to({x: 3, y: 0}, 'R')
+        expect(subject.bitmap).to eql(original_image)
       end
 
       it 'ignores values less than 0' do
-        bitmap.set_pixel_to({x: -1, y: 0}, 'R')
-        expect(bitmap.bitmap).to eql(original_image)
+        subject.set_pixel_to({x: -1, y: 0}, 'R')
+        expect(subject.bitmap).to eql(original_image)
       end
     end
 
     context ":y coordinates is out of range" do
       it 'does nothing' do
-        bitmap.set_pixel_to({x: 0, y: 3}, 'R')
-        expect(bitmap.bitmap).to eql(original_image)
+        subject.set_pixel_to({x: 0, y: 3}, 'R')
+        expect(subject.bitmap).to eql(original_image)
       end
 
       it 'ignores values less than 0' do
-        bitmap.set_pixel_to({x: 0, y: -1}, 'R')
-        expect(bitmap.bitmap).to eql(original_image)
+        subject.set_pixel_to({x: 0, y: -1}, 'R')
+        expect(subject.bitmap).to eql(original_image)
       end
     end
   end
 
   describe '#to_s' do
-    let(:bitmap) { Bitmap.new(4, 4) }
     it "represents bitmap as string" do
-      expect(bitmap.to_s).to eql("OOOO\nOOOO\nOOOO\nOOOO")
+      subject.create_bitmap(4, 4)
+      expect(subject.to_s).to eql("OOOO\nOOOO\nOOOO\nOOOO")
+    end
+  end
+
+  describe '#render_bitmap' do
+    it "renders the bitmap" do
+      expect(STDOUT).to receive(:puts).with(subject)
+      subject.render_bitmap
+    end
+  end
+
+  describe '#color_pixel' do
+    it "colors the given pixel coordinate of the bitmap" do
+      expect(subject).to receive(:set_pixel_to).with({x: 1, y: 3}, 'B')
+      subject.color_pixel('2', '4', 'B')
+    end
+  end
+
+  describe '#color_column' do
+    it "colors column 2 from row 1 to row 3" do
+      expect(subject).to receive(:color_pixel).with('2', '1', 'B')
+      expect(subject).to receive(:color_pixel).with('2', '2', 'B')
+      expect(subject).to receive(:color_pixel).with('2', '3', 'B')
+      subject.color_column('2', '1', '3', 'B')
+    end
+  end
+
+  describe '#color_row' do
+    it "colors row 2 from column 1 to column 3" do
+      expect(subject).to receive(:color_pixel).with('1', '2', 'B')
+      expect(subject).to receive(:color_pixel).with('2', '2', 'B')
+      expect(subject).to receive(:color_pixel).with('3', '2', 'B')
+      subject.color_row('1', '3', '2', 'B')
     end
   end
 end
