@@ -2,7 +2,7 @@ require 'forwardable'
 class Bitmap
   attr_reader :bitmap, :rows, :cols
   extend Forwardable
-  def_delegators :@bitmap, :empty?
+  def_delegators :@bitmap, :nil?
 
   MAX_BITMAP_SIZE = 250
   MIN_BITMAP_SIZE = 1

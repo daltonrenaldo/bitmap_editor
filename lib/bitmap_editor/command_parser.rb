@@ -2,6 +2,7 @@ require './lib/bitmap'
 
 class BitmapEditor
   class CommandParser
+    class UnknownCommandError < StandardError; end
     COMMANDS_MAPPING = {
       'C' => :clear,
       'S' => :render_bitmap,
@@ -12,10 +13,15 @@ class BitmapEditor
     }
 
     def parse(line)
-      return unless line =~ /([A-Z])\s?(.*)/
-      method = COMMANDS_MAPPING[$1]
-      args = $2.split(' ').map{|arg| arg.match(/\d+/) ? arg.to_i : arg }
-      [method, *args]
+      if line =~ /([A-Z])\s?(.*)/
+        method = COMMANDS_MAPPING[$1]
+        if method
+          args = $2.split(' ').map{|arg| arg.match(/\d+/) ? arg.to_i : arg }
+          return [method, *args]
+        end
+      end
+
+      raise UnknownCommandError.new("unrecognised command :(")
     end
   end
 end
