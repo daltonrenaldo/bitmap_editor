@@ -22,14 +22,12 @@ class Bitmap
     @cols = cols
     @bitmap = solid_canvas(color)
   end
-  alias :i :create_bitmap
 
   # clears the bitmap; sets all pixels to white (O)
   # @return the newly cleared bitmap
   def clear
     @bitmap = solid_canvas('O')
   end
-  alias :c :clear
 
   # sets the given pixel to the given color
   # @param pixel [Hash :x, :y] x and y COORDINATES for the pixel
@@ -55,7 +53,6 @@ class Bitmap
     y_index = y.to_i - 1
     set_pixel_to({x: x_index, y: y_index}, color)
   end
-  alias :l :color_pixel
 
   # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive)
   # @param col       [Number] the column X
@@ -68,7 +65,6 @@ class Bitmap
       color_pixel(col, y, color)
     end
   end
-  alias :v :color_column
 
   # Draw a horizontal segment of colour C in row Y between columns X1 and X2 (inclusive)
   # @param col_start [Number] col X1
@@ -81,14 +77,12 @@ class Bitmap
       color_pixel(x, row, color)
     end
   end
-  alias :h :color_row
 
   # Draws the bitmap
   #
   def render_bitmap
     puts self
   end
-  alias :s :render_bitmap
 
   private
 
