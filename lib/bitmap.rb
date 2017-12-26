@@ -6,13 +6,14 @@ class Bitmap
 
   MAX_BITMAP_SIZE = 250
   MIN_BITMAP_SIZE = 1
+  DEFAULT_COLOR   = "O"
 
   # Creates bitmap
   # @param cols
   # @param rows
   # @return [Bitmap] the newly created bitmap
   #
-  def create_bitmap(cols, rows, color = "O")
+  def create_bitmap(cols, rows, color = DEFAULT_COLOR)
     if (rows > MAX_BITMAP_SIZE || rows < MIN_BITMAP_SIZE ||
         cols > MAX_BITMAP_SIZE || cols < MIN_BITMAP_SIZE)
       return puts "Cannot Create Bitmap: Sizes must be between 1 - 250"
@@ -26,7 +27,7 @@ class Bitmap
   # clears the bitmap; sets all pixels to white (O)
   # @return the newly cleared bitmap
   def clear
-    @bitmap = solid_canvas('O')
+    @bitmap = solid_canvas(DEFAULT_COLOR)
   end
 
   def to_s
