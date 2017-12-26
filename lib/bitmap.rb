@@ -29,14 +29,6 @@ class Bitmap
     @bitmap = solid_canvas('O')
   end
 
-  # sets the given pixel to the given color
-  # @param pixel [Hash :x, :y] x and y COORDINATES for the pixel
-  # @param color [String] the color to set the pixel to
-  def set_pixel_to(pixel, color)
-    return unless pixel_exists?(pixel)
-    @bitmap[pixel[:y]][pixel[:x]] = color
-  end
-
   def to_s
     @bitmap.map do |rows|
       rows.join
@@ -51,7 +43,8 @@ class Bitmap
   def color_pixel(x, y, color)
     x_index = x.to_i - 1
     y_index = y.to_i - 1
-    set_pixel_to({x: x_index, y: y_index}, color)
+    return unless pixel_exists?({x: x_index, y: y_index})
+    @bitmap[y_index][x_index] = color
   end
 
   # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive)

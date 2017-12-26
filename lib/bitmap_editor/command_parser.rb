@@ -3,6 +3,7 @@ require './lib/bitmap'
 class BitmapEditor
   class CommandParser
     class UnknownCommandError < StandardError; end
+
     COMMANDS_MAPPING = {
       'C' => :clear,
       'S' => :render_bitmap,
@@ -21,7 +22,7 @@ class BitmapEditor
         end
       end
 
-      raise UnknownCommandError.new("unrecognised command :(")
+      raise UnknownCommandError.new("unrecognised command '#{$1}'")
     end
   end
 end

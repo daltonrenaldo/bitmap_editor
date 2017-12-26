@@ -51,7 +51,7 @@ describe Bitmap do
     end
   end
 
-  describe '#set_pixel_to' do
+  describe '#color_pixel' do
     let (:original_image) do
       [
         ["O", "O", "O"],
@@ -65,7 +65,7 @@ describe Bitmap do
     end
 
     it "changes the color of a given pixel to the given color" do
-      subject.set_pixel_to({x: 1, y: 0}, 'R')
+      subject.color_pixel(2, 1, 'R')
       expect(subject.bitmap).to eql([
         ["O", "R", "O"],
         ["O", "O", "O"],
@@ -75,24 +75,24 @@ describe Bitmap do
 
     context ":x coordinates is out of range" do
       it 'ignores out of upperbound' do
-        subject.set_pixel_to({x: 3, y: 0}, 'R')
+        subject.color_pixel(4, 1, 'R')
         expect(subject.bitmap).to eql(original_image)
       end
 
-      it 'ignores values less than 0' do
-        subject.set_pixel_to({x: -1, y: 0}, 'R')
+      it 'ignores values less than 1' do
+        subject.color_pixel(0, 1, 'R')
         expect(subject.bitmap).to eql(original_image)
       end
     end
 
     context ":y coordinates is out of range" do
       it 'does nothing' do
-        subject.set_pixel_to({x: 0, y: 3}, 'R')
+        subject.color_pixel(1, 4, 'R')
         expect(subject.bitmap).to eql(original_image)
       end
 
-      it 'ignores values less than 0' do
-        subject.set_pixel_to({x: 0, y: -1}, 'R')
+      it 'ignores values less than 1' do
+        subject.color_pixel(1, 0, 'R')
         expect(subject.bitmap).to eql(original_image)
       end
     end
@@ -109,13 +109,6 @@ describe Bitmap do
     it "renders the bitmap" do
       expect(STDOUT).to receive(:puts).with(subject)
       subject.render_bitmap
-    end
-  end
-
-  describe '#color_pixel' do
-    it "colors the given pixel coordinate of the bitmap" do
-      expect(subject).to receive(:set_pixel_to).with({x: 1, y: 3}, 'B')
-      subject.color_pixel('2', '4', 'B')
     end
   end
 
