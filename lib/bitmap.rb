@@ -90,6 +90,7 @@ class Bitmap
     stack.push({x: x, y: y}) # convert to index
     pixel = stack.pop
     return unless original_color == pixel_color(x, y)
+    return if pixel_color(x, y) == color
     color_pixel(pixel[:x], pixel[:y], color)
 
     flood_fill_helper(x - 1, y, original_color, color, stack)

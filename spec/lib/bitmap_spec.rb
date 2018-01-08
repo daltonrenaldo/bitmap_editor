@@ -154,13 +154,24 @@ describe Bitmap do
       end
     end
 
-    context 'scenario 1' do
+    context 'scenario 2' do
       it 'flood/bucket fill the surrounding pixels of the same color' do
         subject.flood_fill(3, 1, 'R')
         expect(bitmap).to eq ([
           ["0", "0", "R", "0", "0"],
           ["0", "0", "R", "0", "0"],
           ["0", "0", "R", "0", "0"]
+        ])
+      end
+    end
+
+    context 'scenario 3' do
+      it 'does not get into infinite loop' do
+        subject.flood_fill(3, 1, 'X')
+        expect(bitmap).to eq ([
+          ["0", "0", "X", "0", "0"],
+          ["0", "0", "X", "0", "0"],
+          ["0", "0", "X", "0", "0"]
         ])
       end
     end
