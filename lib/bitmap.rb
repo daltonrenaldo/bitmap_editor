@@ -42,10 +42,8 @@ class Bitmap
   # @param color [String] the color
   #
   def color_pixel(x, y, color)
-    x_index = x.to_i - 1
-    y_index = y.to_i - 1
-    return unless pixel_exists?({x: x_index, y: y_index})
-    @bitmap[y_index][x_index] = color
+    return unless pixel_exists?(x, y)
+    bitmap[y.to_i - 1][x.to_i - 1] = color
   end
 
   # Draw a vertical segment of colour C in column X between rows Y1 and Y2 (inclusive)
@@ -72,6 +70,13 @@ class Bitmap
     end
   end
 
+  # Fills adjacent pixel of the same color recursively
+  def flood_fill(x, y, color)
+    x_i, y_i = pixel_to_index(x, y)
+    original_color = bitmap[y_i][x_i]
+    flood_fill_helper(x, y, original_color, color)
+  end
+
   # Draws the bitmap
   #
   def render_bitmap
@@ -79,6 +84,31 @@ class Bitmap
   end
 
   private
+
+  def flood_fill_helper(x, y, original_color, color, stack =[])
+    return unless pixel_exists?(x, y)
+    stack.push({x: x, y: y}) # convert to index
+    pixel = stack.pop
+    return unless original_color == pixel_color(x, y)
+    color_pixel(pixel[:x], pixel[:y], color)
+
+    flood_fill_helper(x - 1, y, original_color, color, stack)
+    flood_fill_helper(x + 1, y, original_color, color, stack)
+    flood_fill_helper(x, y - 1, original_color, color, stack)
+    flood_fill_helper(x, y + 1, original_color, color, stack)
+  end
+
+  def pixel_to_index(x, y)
+    x_index = x.to_i - 1
+    y_index = y.to_i - 1
+    [x_index, y_index]
+  end
+
+  def pixel_color(x, y)
+    if pixel_exists?(x, y)
+      bitmap[y - 1][x - 1]
+    end
+  end
 
   def solid_canvas(color)
     array = []
@@ -88,10 +118,13 @@ class Bitmap
     array
   end
 
-  def pixel_exists?(pixel)
-    pixel[:x] < cols &&
-    pixel[:x] >= 0 &&
-    pixel[:y] >= 0 &&
-    pixel[:y] < rows
+  def pixel_exists?(x, y)
+    x_index = x.to_i - 1
+    y_index = y.to_i - 1
+
+    x_index < cols &&
+    x_index >= 0 &&
+    y_index >= 0 &&
+    y_index < rows
   end
 end

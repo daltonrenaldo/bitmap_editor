@@ -127,4 +127,42 @@ describe Bitmap do
       expect(subject.bitmap).to eql([["O", "O", "O"], ["B", "B", "B"], ["O", "O", "O"]])
     end
   end
+
+  describe '#flood_fill' do
+    let(:bitmap) do
+      [
+        ["0", "0", "X", "0", "0"],
+        ["0", "0", "X", "0", "0"],
+        ["0", "0", "X", "0", "0"]
+      ]
+    end
+
+    before do
+      allow(subject).to receive(:bitmap).and_return(bitmap)
+      allow(subject).to receive(:rows).and_return(3)
+      allow(subject).to receive(:cols).and_return(5)
+    end
+
+    context 'scenario 1' do
+      it 'flood/bucket fill the surrounding pixels of the same color' do
+        subject.flood_fill(2, 2, 'R')
+        expect(bitmap).to eq ([
+          ["R", "R", "X", "0", "0"],
+          ["R", "R", "X", "0", "0"],
+          ["R", "R", "X", "0", "0"]
+        ])
+      end
+    end
+
+    context 'scenario 1' do
+      it 'flood/bucket fill the surrounding pixels of the same color' do
+        subject.flood_fill(3, 1, 'R')
+        expect(bitmap).to eq ([
+          ["0", "0", "R", "0", "0"],
+          ["0", "0", "R", "0", "0"],
+          ["0", "0", "R", "0", "0"]
+        ])
+      end
+    end
+  end
 end
