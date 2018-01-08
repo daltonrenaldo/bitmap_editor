@@ -10,7 +10,8 @@ class BitmapEditor
       'I' => :create_bitmap,
       'L' => :color_pixel,
       'V' => :color_column,
-      'H' => :color_row
+      'H' => :color_row,
+      'F' => :flood_fill
     }
 
     def parse(line)

@@ -30,6 +30,11 @@ describe BitmapEditor::CommandParser do
       it { is_expected.to eql([:color_row, 3, 5, 2, 'Z']) }
     end
 
+    context 'line is "F 2 2 Z"' do
+      let(:line) { 'F 2 2 Z' }
+      it { is_expected.to eql([:flood_fill, 2, 2,'Z']) }
+    end
+
     context 'line is "S"' do
       let(:line) { 'S' }
       it { is_expected.to eql([:render_bitmap]) }
